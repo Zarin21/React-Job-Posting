@@ -31,36 +31,34 @@
 //   return <h1>Hello, {props.name}!</h1>;
 // };
 
-// Components
-import Navbar from './components/Navbar'
-import Hero from './components/Hero'
-import HomeCards from './components/HomeCards'
-import JobListings from './components/JobListings'
-import ViewAllJobs from './components/ViewAllJobs'
+// React Router
+import {
+  Route,
+  createBrowserRouter,
+  createRoutesFromElements,
+  RouterProvider,
+} from 'react-router-dom'
 
+// // Components
+// import Navbar from './components/Navbar'
+// import Hero from './components/Hero'
+// import HomeCards from './components/HomeCards'
+// import JobListings from './components/JobListings'
+// import ViewAllJobs from './components/ViewAllJobs'
+
+// ^ Shifted to HomePage.jsx
+import HomePage from './pages/HomePage'
 import React from 'react'
 
-const App = () => {
-  return (
-    <div>
-      <>
-        {/* <!-- Navbar Component --> */}
-        <Navbar />
-        {/* <!-- Hero Component --> */}
-        {/* Example of props */}
-        <Hero title="Test Title" subtitle="This is a subtitle" />
-        {/* Card components */}
-        {/* <!-- Developers and Employers --> */}
-        <HomeCards />
-
-        {/* <!-- Browse Jobs --> */}
-        <JobListings />
-
-        {/* <!-- View All Jobs Button --> */}
-        <ViewAllJobs />
-      </>
-    </div>
+// Router setup
+const router = createBrowserRouter(
+  createRoutesFromElements(
+    <Route index element={<HomePage />} /> // index route;
   )
+)
+
+const App = () => {
+  return <RouterProvider router={router} />
 }
 
 export default App
