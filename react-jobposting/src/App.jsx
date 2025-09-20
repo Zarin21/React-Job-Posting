@@ -53,6 +53,7 @@ import MainLayout from './layouts/MainLayout'
 import HomePage from './pages/HomePage'
 import JobsPage from './pages/JobsPage'
 import NotFoundPage from './pages/NotFoundPage'
+import JobPage, { jobLoader } from './pages/JobPage'
 import React from 'react'
 
 // Router setup
@@ -62,8 +63,11 @@ const router = createBrowserRouter(
       {/* This route underneath is going to use the above layout; Basically everything in the Route will use the layout route */}
       <Route index element={<HomePage />} />
       <Route path="/jobs" element={<JobsPage />} />
+       {/* Job page  */}
+      <Route path="/jobs/:id" element={<JobPage />} loader = {jobLoader} />
       {/* '*' is "Catch All" or "Splat" segment*/}
       <Route path="*" element={<NotFoundPage />} />
+  
     </Route>
   )
 )
