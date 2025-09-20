@@ -47,13 +47,24 @@ import {
 // import ViewAllJobs from './components/ViewAllJobs'
 
 // ^ Shifted to HomePage.jsx
+
+// Main layout
+import MainLayout from './layouts/MainLayout'
 import HomePage from './pages/HomePage'
+import JobsPage from './pages/JobsPage'
+import NotFoundPage from './pages/NotFoundPage'
 import React from 'react'
 
 // Router setup
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route index element={<HomePage />} /> // index route;
+    <Route path="/" element={<MainLayout />}>
+      {/* This route underneath is going to use the above layout; Basically everything in the Route will use the layout route */}
+      <Route index element={<HomePage />} />
+      <Route path="/jobs" element={<JobsPage />} />
+      {/* '*' is "Catch All" or "Splat" segment*/}
+      <Route path="*" element={<NotFoundPage />} />
+    </Route>
   )
 )
 
