@@ -1,49 +1,55 @@
 import React from 'react'
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useParams, useLoaderData, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 
-const AddJobPage = ({ addJobSubmit }) => {
-    const [ title, setTitle ] = useState('');
-    const [ type, setType ] = useState('Full-Time');
-    const [ location, setLocation ] = useState('');
-    const [ description, setDescription ] = useState('');
-    const [ salary, setSalary ] = useState('Under $50K');
-    const [ companyName, setCompanyName ] = useState('');
-    const [ companyDescription, setCompanyDescription ] = useState('');
-    const [ contactEmail, setContactEmail ] = useState('');
-    const [ contactPhone, setContactPhone ] = useState('');
+const EditJobPage = ({ updateJobSubmit }) => {
+  const job = useLoaderData()
+  const [title, setTitle] = useState(job.title)
+  const [type, setType] = useState(job.type)
+  const [location, setLocation] = useState(job.location)
+  const [description, setDescription] = useState(job.description)
+  const [salary, setSalary] = useState(job.salary)
+  const [companyName, setCompanyName] = useState(job.company.name)
+  const [companyDescription, setCompanyDescription] = useState(
+    job.company.description
+  )
+  const [contactEmail, setContactEmail] = useState(job.company.contactEmail)
+  const [contactPhone, setContactPhone] = useState(job.company.contactPhone)
+  const { id } = useParams()
 
-    const navigate = useNavigate();
+  const navigate = useNavigate()
 
-    const submitForm = (e) => { 
-        e.preventDefault();
-        // Prevents the default action of the form submission, which is to reload the page
-        const newJob = {
-            title,
-            type,
-            location,
-            description,
-            salary,
-            company: {
-                name: companyName,
-                description: companyDescription,
-                contactEmail,
-                contactPhone,
-            },
-        };
-        // Here you would typically send newJob to your backend server
-        // Reset form fields after submission
-        addJobSubmit(newJob);
-        toast.success('Job listing added successfully!');
-        return navigate('/jobs');
+  const submitForm = (e) => {
+    e.preventDefault()
+    // Prevents the default action of the form submission, which is to reload the page
+    const updatedJob = {
+      id,
+      title,
+      type,
+      location,
+      description,
+      salary,
+      company: {
+        name: companyName,
+        description: companyDescription,
+        contactEmail,
+        contactPhone,
+      },
     }
+    updateJobSubmit(updatedJob)
+    toast.success('Job listing updated successfully!')
+    return navigate(`/jobs/${id}`)
+  }
+
   return (
     <section className="bg-indigo-50">
       <div className="container m-auto max-w-2xl py-24">
         <div className="bg-white px-6 py-8 mb-4 shadow-md rounded-md border m-4 md:m-0">
           <form onSubmit={submitForm}>
-            <h2 className="text-3xl text-center font-semibold mb-6">Add Job</h2>
+            <h2 className="text-3xl text-center font-semibold mb-6">
+              Update Job
+            </h2>
 
             <div className="mb-4">
               <label
@@ -57,9 +63,9 @@ const AddJobPage = ({ addJobSubmit }) => {
                 name="type"
                 className="border rounded w-full py-2 px-3"
                 required
-                value = {type}
+                value={type}
                 // onChange has to be called with an event parameter when using setState function and getting value from input field
-                onChange = {(e) => setType(e.target.value)}
+                onChange={(e) => setType(e.target.value)}
                 // e is the event object, target is the element that triggered the event, value is the value of that element
               >
                 <option value="Full-Time">Full-Time</option>
@@ -80,8 +86,8 @@ const AddJobPage = ({ addJobSubmit }) => {
                 className="border rounded w-full py-2 px-3 mb-2"
                 placeholder="eg. Software Engineer Co-op"
                 required
-                value = {title}
-                onChange = {(e) => setTitle(e.target.value)}
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
               />
             </div>
             <div className="mb-4">
@@ -97,8 +103,8 @@ const AddJobPage = ({ addJobSubmit }) => {
                 className="border rounded w-full py-2 px-3"
                 rows="4"
                 placeholder="Add any job duties, expectations, requirements, etc"
-                value = {description}
-                onChange = {(e) => setDescription(e.target.value)}
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
               ></textarea>
             </div>
 
@@ -114,8 +120,8 @@ const AddJobPage = ({ addJobSubmit }) => {
                 name="salary"
                 className="border rounded w-full py-2 px-3"
                 required
-                value = {salary}
-                onChange = {(e) => setSalary(e.target.value)}
+                value={salary}
+                onChange={(e) => setSalary(e.target.value)}
               >
                 <option value="">Select Salary Range</option>
                 <option value="Under $50K">Under $50K</option>
@@ -143,8 +149,8 @@ const AddJobPage = ({ addJobSubmit }) => {
                 className="border rounded w-full py-2 px-3 mb-2"
                 placeholder="Company Location"
                 required
-                value = {location}
-                onChange = {(e) => setLocation(e.target.value)}
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
               />
             </div>
 
@@ -164,7 +170,7 @@ const AddJobPage = ({ addJobSubmit }) => {
                 className="border rounded w-full py-2 px-3"
                 placeholder="Company Name"
                 value={companyName}
-                onChange = {(e) => setCompanyName(e.target.value)}
+                onChange={(e) => setCompanyName(e.target.value)}
               />
             </div>
 
@@ -182,7 +188,7 @@ const AddJobPage = ({ addJobSubmit }) => {
                 rows="4"
                 placeholder="What does your company do?"
                 value={companyDescription}
-                onChange = {(e) => setCompanyDescription(e.target.value)}
+                onChange={(e) => setCompanyDescription(e.target.value)}
               ></textarea>
             </div>
 
@@ -200,8 +206,8 @@ const AddJobPage = ({ addJobSubmit }) => {
                 className="border rounded w-full py-2 px-3"
                 placeholder="Email address for applicants"
                 required
-                value = {contactEmail}
-                onChange = {(e) => setContactEmail(e.target.value)}
+                value={contactEmail}
+                onChange={(e) => setContactEmail(e.target.value)}
               />
             </div>
             <div className="mb-4">
@@ -217,8 +223,8 @@ const AddJobPage = ({ addJobSubmit }) => {
                 name="contact_phone"
                 className="border rounded w-full py-2 px-3"
                 placeholder="Optional phone for applicants"
-                value = {contactPhone}
-                onChange = {(e) => setContactPhone(e.target.value)}
+                value={contactPhone}
+                onChange={(e) => setContactPhone(e.target.value)}
               />
             </div>
 
@@ -227,7 +233,7 @@ const AddJobPage = ({ addJobSubmit }) => {
                 className="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline"
                 type="submit"
               >
-                Add Job
+                Update Job
               </button>
             </div>
           </form>
@@ -237,4 +243,4 @@ const AddJobPage = ({ addJobSubmit }) => {
   )
 }
 
-export default AddJobPage
+export default EditJobPage
