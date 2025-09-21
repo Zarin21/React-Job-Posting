@@ -54,25 +54,47 @@ import HomePage from './pages/HomePage'
 import JobsPage from './pages/JobsPage'
 import NotFoundPage from './pages/NotFoundPage'
 import JobPage, { jobLoader } from './pages/JobPage'
+import AddJobPage from './pages/AddJobPage'
 import React from 'react'
 
-// Router setup
-const router = createBrowserRouter(
-  createRoutesFromElements(
-    <Route path="/" element={<MainLayout />}>
-      {/* This route underneath is going to use the above layout; Basically everything in the Route will use the layout route */}
-      <Route index element={<HomePage />} />
-      <Route path="/jobs" element={<JobsPage />} />
-       {/* Job page  */}
-      <Route path="/jobs/:id" element={<JobPage />} loader = {jobLoader} />
-      {/* '*' is "Catch All" or "Splat" segment*/}
-      <Route path="*" element={<NotFoundPage />} />
-  
-    </Route>
-  )
-)
-
 const App = () => {
+
+  // Function to handle adding a new job
+  // Add new Job
+  const addJob = async (newJob) => {
+    const res = await fetch('/api/jobs', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(newJob),
+    })
+    return
+  }
+
+  // Delete job
+  const deleteJob = async (id) => {
+    const res = await fetch(`/api/jobs/${id}`, {
+      method: 'DELETE',
+    })
+    return
+  }
+
+  // Router setup
+  const router = createBrowserRouter(
+    createRoutesFromElements(
+      <Route path="/" element={<MainLayout />}>
+        {/* This route underneath is going to use the above layout; Basically everything in the Route will use the layout route */}
+        <Route index element={<HomePage />} />
+        <Route path="/jobs" element={<JobsPage />} />
+        {/* Job page  */}
+        <Route path="/jobs/:id" element={<JobPage deleteJob= { deleteJob }/>} loader={jobLoader} />
+        <Route path="/add-job" element={<AddJobPage addJobSubmit={addJob} />} />
+        {/* '*' is "Catch All" or "Splat" segment*/}
+        <Route path="*" element={<NotFoundPage />} />
+      </Route>
+    )
+  )
   return <RouterProvider router={router} />
 }
 
